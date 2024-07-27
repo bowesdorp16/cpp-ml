@@ -25,11 +25,11 @@ int main()
 
   std::cout << "Encoding dataset" << std::endl;
 
-  ETL::Dataset encodedData = ETL.encodeDataset();
+  ETL::EncodedDataset encodedData = ETL.encodeDataset();
 
   // ETL.printRow(encodedData[2]);
 
-  ETL.saveToCSV(encodedData, "encoded_housing_data.csv");
+  // ETL.saveToCSV(encodedData, "encoded_housing_data.csv");
 
 
   return 0;

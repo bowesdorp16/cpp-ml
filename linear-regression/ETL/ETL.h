@@ -11,6 +11,9 @@ public:
   using Row = std::vector<std::string>;
   using Dataset = std::vector<Row>;
 
+  using EncodedRow = std::vector<double>;
+  using EncodedDataset = std::vector<EncodedRow>;
+
   ETL() {}
 
   Row getHeader() const
@@ -21,6 +24,11 @@ public:
   Dataset getDataset() const
   {
     return dataset;
+  }
+
+  EncodedDataset getEncodedDataset() const
+  {
+    return encodedDataset;
   }
 
   void printHeader()
@@ -37,14 +45,21 @@ public:
 
   Dataset dropRowsWithNulls();
 
-  Dataset encodeDataset();
-
   Dataset transposeDataset(const Dataset &dataset);
+
+  EncodedDataset encodeDataset();
+
+  EncodedDataset transposeEncodedDataset(const EncodedDataset &encodedDataset);
+
+
 
 private:
   Row header;
 
   Dataset dataset;
+
+  EncodedDataset encodedDataset;
+
 
   void setHeader(const Row &header)
   {
@@ -56,9 +71,16 @@ private:
     this->dataset = dataset;
   }
 
+  void setEncodedDataset(const EncodedDataset &encodedDataset)
+  {
+    this->encodedDataset = encodedDataset;
+  }
+
   std::string convertRowToString(const Row &row);
 
   Row parseLine(const std::string &line);
+
+  EncodedRow convertStringRowToDoubleRow(const Row &row);
 
   bool validateRow(const Row &row) const;
 

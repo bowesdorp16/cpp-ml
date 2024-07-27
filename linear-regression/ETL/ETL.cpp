@@ -176,45 +176,80 @@ std::unordered_map<std::string, int> getUniqueValuesWithDictIndices(const ETL::R
   return uniqueMap;
 }
 
-ETL::Row convertCategoricalRow(const ETL::Row &row)
+ETL::EncodedRow convertCategoricalRow(const ETL::Row &row)
 {
-  ETL::Row categoricalRow;
+  ETL::EncodedRow categoricalRow;
 
   std::unordered_map<std::string, int> uniqueValues = getUniqueValuesWithDictIndices(row);
 
   // Convert the row to categorical
   for (const auto &value : row)
   {
-    categoricalRow.push_back(std::to_string(uniqueValues[value]));
+    categoricalRow.push_back(uniqueValues[value]);
   }
-
 
   return categoricalRow;
 }
 
-ETL::Dataset ETL::encodeDataset()
+ETL::EncodedDataset ETL::transposeEncodedDataset(const EncodedDataset &encodedDataset)
+{
+
+  if (encodedDataset.empty())
+    return encodedDataset;
+
+  size_t rows = encodedDataset.size();
+  size_t cols = encodedDataset[0].size();
+
+  EncodedDataset transposed(cols, ETL::EncodedRow(rows));
+
+  for (size_t i = 0; i < rows; ++i)
+  {
+    for (size_t j = 0; j < cols; ++j)
+    {
+      transposed[j][i] = encodedDataset[i][j];
+    }
+  }
+
+  return encodedDataset;
+}
+
+ETL::EncodedRow ETL::convertStringRowToDoubleRow(const ETL::Row &row)
+{
+  ETL::EncodedRow doubleRow;
+
+  for (const auto &cell : row)
+  {
+    doubleRow.push_back(std::stod(cell));
+  }
+
+  return doubleRow;
+}
+
+ETL::EncodedDataset ETL::encodeDataset()
 {
   Dataset dataset = getDataset();
 
   Dataset transposed = transposeDataset(dataset);
 
-  Dataset encodedDataset;
+  EncodedDataset encodedDataset;
 
   for (auto &row : transposed)
   {
     if (!rowOnlyContainsNumbers(row))
     {
-      ETL::Row categoricalRow = convertCategoricalRow(row);
+      ETL::EncodedRow categoricalRow = convertCategoricalRow(row);
 
       encodedDataset.push_back(categoricalRow);
     } else {
-      encodedDataset.push_back(row);
+
+      ETL::EncodedRow encodedRow = convertStringRowToDoubleRow(row);
+      encodedDataset.push_back(encodedRow);
     }
   }
 
-  encodedDataset = transposeDataset(encodedDataset);
+  encodedDataset = transposeEncodedDataset(encodedDataset);
 
-  setDataset(encodedDataset);
+  setEncodedDataset(encodedDataset);
 
   return encodedDataset;
 }
