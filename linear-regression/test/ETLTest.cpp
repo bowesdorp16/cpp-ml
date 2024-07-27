@@ -25,7 +25,10 @@ int main()
 
   std::cout << "Encoding dataset" << std::endl;
 
-  ETL.encodeDataset();
+  ETL::Dataset encodedData = ETL.encodeDataset();
+
+  ETL.printRow(encodedData[2]);
+
 
   return 0;
 }

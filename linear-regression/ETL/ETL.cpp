@@ -3,6 +3,13 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_map>
+
+void ETL::printRow(const Row &row)
+{
+  std::string rowString = convertRowToString(row);
+  std::cout << rowString << std::endl;
+}
 
 ETL::Dataset ETL::readCSV(const std::string &filename, bool header)
 {
@@ -131,22 +138,62 @@ bool ETL::rowOnlyContainsNumbers(const Row &row) const
   return true;
 }
 
+std::unordered_map<std::string, int> getUniqueValuesWithDictIndices(const ETL::Row &row)
+{
+  std::unordered_map<std::string, int> uniqueMap;
+  int index = 0;
+
+  for (const auto &value : row)
+  {
+    // If the string is not already in the map, add it with the current index
+    if (uniqueMap.find(value) == uniqueMap.end())
+    {
+      uniqueMap[value] = index++;
+    }
+  }
+
+  return uniqueMap;
+}
+
+ETL::Row convertCategoricalRow(const ETL::Row &row)
+{
+  ETL::Row categoricalRow;
+
+  std::unordered_map<std::string, int> uniqueValues = getUniqueValuesWithDictIndices(row);
+
+  // Convert the row to categorical
+  for (const auto &value : row)
+  {
+    categoricalRow.push_back(std::to_string(uniqueValues[value]));
+  }
+
+
+  return categoricalRow;
+}
+
 ETL::Dataset ETL::encodeDataset()
 {
   Dataset dataset = getDataset();
 
   Dataset transposed = transposeDataset(dataset);
 
+  Dataset encodedDataset;
+
   for (auto &row : transposed)
   {
     if (!rowOnlyContainsNumbers(row))
     {
-      std::cout << "Row does not only contain numbers: " << convertRowToString(row) << std::endl;
+      ETL::Row categoricalRow = convertCategoricalRow(row);
+
+      encodedDataset.push_back(categoricalRow);
+    } else {
+      encodedDataset.push_back(row);
     }
   }
 
+  encodedDataset = transposeDataset(encodedDataset);
 
-  setDataset(dataset);
+  setDataset(encodedDataset);
 
-  return dataset;
+  return encodedDataset;
 }

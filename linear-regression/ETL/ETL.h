@@ -29,11 +29,7 @@ public:
     std::cout << headerString << std::endl;
   }
 
-  void printRow(const Row &row)
-  {
-    std::string rowString = convertRowToString(row);
-    std::cout << rowString << std::endl;
-  }
+  void printRow(const Row &row);
 
   Dataset readCSV(const std::string &filename, bool header = true);
 

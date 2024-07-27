@@ -1,7 +1,5 @@
 {
   "files.associations": {
-    "istream": "cpp",
-    "vector": "cpp",
     "__bit_reference": "cpp",
     "__config": "cpp",
     "__debug": "cpp",
@@ -37,6 +35,7 @@
     "ios": "cpp",
     "iosfwd": "cpp",
     "iostream": "cpp",
+    "istream": "cpp",
     "limits": "cpp",
     "locale": "cpp",
     "mutex": "cpp",
@@ -54,6 +53,11 @@
     "typeinfo": "cpp",
     "unordered_map": "cpp",
     "variant": "cpp",
-    "algorithm": "cpp"
-  }
+    "vector": "cpp",
+    "algorithm": "cpp",
+    "unordered_set": "cpp",
+    "__tree": "cpp",
+    "map": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "enabled"
 }
