@@ -49,15 +49,12 @@ public:
 
   Dataset encodeDataset();
 
-
-
 private:
   Row header;
 
   Dataset dataset;
 
   EncodedDataset encodedDataset;
-
 
   void setHeader(const Row &header)
   {

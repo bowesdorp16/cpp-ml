@@ -41,25 +41,30 @@ ETL::Dataset ETL::readCSV(const std::string &filename, bool header)
   return dataset;
 }
 
-void ETL::saveToCSV(const ETL::Dataset& dataset, const std::string& filename) {
-    std::ofstream file(filename);
+void ETL::saveToCSV(const ETL::Dataset &dataset, const std::string &filename)
+{
+  std::ofstream file(filename);
 
-    if (!file.is_open()) {
-        std::cerr << "Could not open the file!" << std::endl;
-        return;
+  if (!file.is_open())
+  {
+    std::cerr << "Could not open the file!" << std::endl;
+    return;
+  }
+
+  for (const auto &row : dataset)
+  {
+    for (size_t i = 0; i < row.size(); ++i)
+    {
+      file << row[i];
+      if (i < row.size() - 1)
+      {
+        file << ",";
+      }
     }
+    file << "\n";
+  }
 
-    for (const auto& row : dataset) {
-        for (size_t i = 0; i < row.size(); ++i) {
-            file << row[i];
-            if (i < row.size() - 1) {
-                file << ",";
-            }
-        }
-        file << "\n";
-    }
-
-    file.close();
+  file.close();
 }
 
 ETL::Row ETL::parseLine(const std::string &line)
@@ -188,7 +193,6 @@ ETL::Row convertCategoricalRow(const ETL::Row &row)
     categoricalRow.push_back(std::to_string(uniqueValues[value]));
   }
 
-
   return categoricalRow;
 }
 
@@ -207,7 +211,9 @@ ETL::Dataset ETL::encodeDataset()
       ETL::Row categoricalRow = convertCategoricalRow(row);
 
       encodedDataset.push_back(categoricalRow);
-    } else {
+    }
+    else
+    {
       encodedDataset.push_back(row);
     }
   }
