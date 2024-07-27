@@ -9,9 +9,9 @@ int main()
 
   ETL::Dataset data = ETL.readCSV(filename);
 
-  std::cout << "Printing row" << std::endl;
+  // std::cout << "Printing row" << std::endl;
 
-  ETL.printRow(data[2]);
+  // ETL.printRow(data[2]);
 
   std::cout << "Dropping rows without nulls" << std::endl;
 
@@ -21,14 +21,13 @@ int main()
 
   std::cout << "Transposed row" << std::endl;
 
-  ETL.printRow(transposedData[2]);
+  // ETL.printRow(transposedData[2]);
 
   std::cout << "Encoding dataset" << std::endl;
 
   ETL::Dataset encodedData = ETL.encodeDataset();
 
-  ETL.printRow(encodedData[2]);
-
+  // ETL.printRow(encodedData[2]);
 
   ETL.saveToCSV(encodedData, "encoded_housing_data.csv");
 
