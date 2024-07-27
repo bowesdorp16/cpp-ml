@@ -47,9 +47,7 @@ public:
 
   Dataset transposeDataset(const Dataset &dataset);
 
-  EncodedDataset encodeDataset();
-
-  EncodedDataset transposeEncodedDataset(const EncodedDataset &encodedDataset);
+  Dataset encodeDataset();
 
 
 
@@ -79,8 +77,6 @@ private:
   std::string convertRowToString(const Row &row);
 
   Row parseLine(const std::string &line);
-
-  EncodedRow convertStringRowToDoubleRow(const Row &row);
 
   bool validateRow(const Row &row) const;
 
