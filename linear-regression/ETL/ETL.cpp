@@ -41,6 +41,27 @@ ETL::Dataset ETL::readCSV(const std::string &filename, bool header)
   return dataset;
 }
 
+void ETL::saveToCSV(const ETL::Dataset& dataset, const std::string& filename) {
+    std::ofstream file(filename);
+
+    if (!file.is_open()) {
+        std::cerr << "Could not open the file!" << std::endl;
+        return;
+    }
+
+    for (const auto& row : dataset) {
+        for (size_t i = 0; i < row.size(); ++i) {
+            file << row[i];
+            if (i < row.size() - 1) {
+                file << ",";
+            }
+        }
+        file << "\n";
+    }
+
+    file.close();
+}
+
 ETL::Row ETL::parseLine(const std::string &line)
 {
   std::istringstream string_stream(line);

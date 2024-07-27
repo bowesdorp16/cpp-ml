@@ -30,5 +30,8 @@ int main()
   ETL.printRow(encodedData[2]);
 
 
+  ETL.saveToCSV(encodedData, "encoded_housing_data.csv");
+
+
   return 0;
 }

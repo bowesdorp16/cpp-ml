@@ -31,6 +31,8 @@ public:
 
   void printRow(const Row &row);
 
+  void saveToCSV(const Dataset &dataset, const std::string &filename);
+
   Dataset readCSV(const std::string &filename, bool header = true);
 
   Dataset dropRowsWithNulls();
