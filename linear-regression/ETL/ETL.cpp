@@ -224,3 +224,25 @@ ETL::Dataset ETL::encodeDataset()
 
   return encodedDataset;
 }
+
+
+ETL::NumericalDataset ETL::convertToNumericalDataset() const
+{
+  NumericalDataset numericalDataset;
+
+  Dataset dataset = getDataset();
+
+  for (const auto &row : dataset)
+  {
+    NumericalRow numericalRow;
+
+    for (const auto &cell : row)
+    {
+      numericalRow.push_back(std::stof(cell));
+    }
+
+    numericalDataset.push_back(numericalRow);
+  }
+
+  return numericalDataset;
+}
