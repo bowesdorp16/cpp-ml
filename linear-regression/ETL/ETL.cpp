@@ -225,7 +225,6 @@ ETL::Dataset ETL::encodeDataset()
   return encodedDataset;
 }
 
-
 ETL::NumericalDataset ETL::convertToNumericalDataset() const
 {
   NumericalDataset numericalDataset;
