@@ -51,7 +51,7 @@ void ETL::saveToCSV(const ETL::Dataset &dataset, const std::string &filename)
     return;
   }
 
-  for (const auto &row : dataset)
+  for (const ETL::Row &row : dataset)
   {
     for (size_t i = 0; i < row.size(); ++i)
     {
@@ -84,7 +84,7 @@ ETL::Row ETL::parseLine(const std::string &line)
 std::string ETL::convertRowToString(const Row &row)
 {
   std::string str;
-  for (const auto &cell : row)
+  for (const std::string &cell : row)
   {
     str += cell + ",";
   }
@@ -96,7 +96,7 @@ std::string ETL::convertRowToString(const Row &row)
 
 bool ETL::validateRow(const Row &row) const
 {
-  for (const auto &cell : row)
+  for (const std::string &cell : row)
   {
     if (cell.empty())
     {
@@ -114,7 +114,7 @@ ETL::Dataset ETL::dropRowsWithNulls()
 
   Dataset dataset = getDataset();
 
-  for (const auto &row : dataset)
+  for (const ETL::Row &row : dataset)
   {
     if (validateRow(row))
     {
@@ -153,7 +153,7 @@ ETL::Dataset ETL::transposeDataset(const Dataset &dataset)
 
 bool ETL::rowOnlyContainsNumbers(const Row &row) const
 {
-  for (const auto &cell : row)
+  for (const std::string &cell : row)
   {
     if (!std::all_of(cell.begin(), cell.end(), ::isdigit))
     {
@@ -169,12 +169,12 @@ std::unordered_map<std::string, int> getUniqueValuesWithDictIndices(const ETL::R
   std::unordered_map<std::string, int> uniqueMap;
   int index = 0;
 
-  for (const auto &value : row)
+  for (const std::string &cell : row)
   {
     // If the string is not already in the map, add it with the current index
-    if (uniqueMap.find(value) == uniqueMap.end())
+    if (uniqueMap.find(cell) == uniqueMap.end())
     {
-      uniqueMap[value] = index++;
+      uniqueMap[cell] = index++;
     }
   }
 
@@ -188,9 +188,9 @@ ETL::Row convertCategoricalRow(const ETL::Row &row)
   std::unordered_map<std::string, int> uniqueValues = getUniqueValuesWithDictIndices(row);
 
   // Convert the row to categorical
-  for (const auto &value : row)
+  for (const std::string &cell : row)
   {
-    categoricalRow.push_back(std::to_string(uniqueValues[value]));
+    categoricalRow.push_back(std::to_string(uniqueValues[cell]));
   }
 
   return categoricalRow;
@@ -204,7 +204,7 @@ ETL::Dataset ETL::encodeDataset()
 
   Dataset encodedDataset;
 
-  for (auto &row : transposed)
+  for (ETL::Row &row : transposed)
   {
     if (!rowOnlyContainsNumbers(row))
     {
@@ -231,11 +231,11 @@ ETL::NumericalDataset ETL::convertToNumericalDataset() const
 
   Dataset dataset = getDataset();
 
-  for (const auto &row : dataset)
+  for (const ETL::Row &row : dataset)
   {
     NumericalRow numericalRow;
 
-    for (const auto &cell : row)
+    for (const std::string &cell : row)
     {
       numericalRow.push_back(std::stof(cell));
     }
